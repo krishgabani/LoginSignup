@@ -6,6 +6,7 @@ import Login from "./components/login/Login";
 import Register from "./components/register/Register";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
+import EmailVerify from "./components/EmailVerify";
 
 function App() {
   const [user, setLoginUser] = useState({});
@@ -16,7 +17,7 @@ function App() {
           <Route
             path="/"
             element={
-              user && user._id ? (
+              user && user.password ? (
                 <Homepage setLoginUser={setLoginUser} />
               ) : (
                 <Login setLoginUser={setLoginUser} />
@@ -28,6 +29,8 @@ function App() {
             element={<Login setLoginUser={setLoginUser} />}
           />
           <Route path="/register" element={<Register />} />
+          <Route path="/users/:id/verify/:token" element={<EmailVerify />} />
+
         </Routes>
       </Router>
       <ToastContainer autoClose={2000} />

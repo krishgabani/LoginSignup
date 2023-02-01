@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 const Register = () => {
   const navigate = useNavigate();
 
+  
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -22,17 +23,26 @@ const Register = () => {
     });
   };
 
-  const register = () => {
+  
+
+  const register = async () => {
     const { name, email, password, reEnterPassword } = user;
     if (name && email && password && password === reEnterPassword) {
-      axios.post("http://localhost:9002/register", user).then((res) => {
-        if (res.data.status === 1) {
+      await axios.post("http://127.0.0.1:3000/api/users", user).then((res) => {
+        console.log("connect");
+        console.log(res);
+        console.log(res.data.status);
+        
+        if (res.status === 201) {
           toast.success(res.data.message);
         } else {
+          console.log("this is meet gami");
           toast.error(res.data.message);
         }
         // alert(res.data.message);
-        navigate("/login");
+        //navigate("/login");
+      }).catch((err) => {
+        toast.error("Invalid input | email is alreadt there");
       });
     } else {
       toast.error("Invalid input");

@@ -3,11 +3,12 @@ import "./login.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import {Homepage } from "../homepage/Homepage"
 
 const Login = ({ setLoginUser }) => {
   const navigate = useNavigate();
 
-  const [user, setUser] = useState({
+  const [user, setUser] = useState({   
     email: "",
     password: "",
   });
@@ -21,15 +22,33 @@ const Login = ({ setLoginUser }) => {
   };
 
   const login = () => {
-    axios.post("http://localhost:9002/login", user).then((res) => {
-      if (res.data.status === 1) {
+    axios.post("http://127.0.0.1:3000/api/auth", user).then((res) => {
+      //console.log("hello guys");
+      console.log(res);
+      
+      if (res.status === 200) {
+        console.log("this is done");
         toast.success(res.data.message);
-      } else {
+        console.log(user);
+        //console.log(res.data.user);
+        setLoginUser(user);
+        navigate("/");
+      }else{
+        console.log("error");
         toast.error(res.data.message);
       }
       // alert(res.data.message)
-      setLoginUser(res.data.user);
-      navigate("/");
+      
+      
+    }).catch((err) => {
+      console.log(err);
+      toast.error("please put valid email or please verifyed on your email");
+      //console.log("He");
+      
+      // if(err.status === 401) {
+      //   console.log("hey");
+      //   toast.error("Plase Enter the Valid Email ID");
+      // }      
     });
   };
 
